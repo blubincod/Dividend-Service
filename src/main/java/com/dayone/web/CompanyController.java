@@ -7,7 +7,6 @@ import com.dayone.service.CompanyService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +25,7 @@ public class CompanyController {
 
     /**
      * 자동완성 기능을 위한 prefix 단어 검색 기능
+     *
      * @param keyword
      * @return
      */
@@ -37,6 +37,7 @@ public class CompanyController {
 
     /**
      * 회사 목록 조회
+     *
      * @param pageable
      * @return
      */
@@ -48,6 +49,7 @@ public class CompanyController {
 
     /**
      * 회사 및 배당금 정보 추가
+     *
      * @param request
      * @return
      */
@@ -59,6 +61,7 @@ public class CompanyController {
         }
 
         Company company = this.companyService.save(ticker);
+        this.companyService.addAutocompleteKeyword(company.getName());
 
         return ResponseEntity.ok(company);
     }
