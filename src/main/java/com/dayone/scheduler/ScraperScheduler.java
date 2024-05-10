@@ -47,10 +47,10 @@ public class ScraperScheduler {
                     .map(e -> new DividendEntity(company.getId(), e))
                     // 엘리먼트를 하나씩 디비든 레파지토리에 삽입
                     .forEach(e -> {
-                        // do something
                         boolean exists = this.dividendRepository.existsByCompanyIdAndDate(e.getCompanyId(), e.getDate());
                         if (!exists) {
                             this.dividendRepository.save(e);
+                            log.info("insert new dividend -> " + e.toString());
                         }
                     });
 

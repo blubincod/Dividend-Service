@@ -1,5 +1,6 @@
 package com.dayone.service;
 
+import com.dayone.exception.impl.NoCompanyException;
 import com.dayone.model.Company;
 import com.dayone.model.ScrapedResult;
 import com.dayone.persist.CompanyRepository;
@@ -10,7 +11,6 @@ import com.dayone.scraper.Scraper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.Trie;
-import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -90,8 +90,15 @@ public class CompanyService {
 
     public String deleteCompany(String ticker) {
         // 1. 배당금 정보 삭제
+        var company = this.companyRepository.findByTicker(ticker)
+                .orElseThrow(() -> new NoCompanyException());
+
+        this.dividendRepository.deleteAllByCompanyId(company.getId());
+        this.companyRepository.delete(company);
+
         // 2. 회사 정보 삭제
-        throw new NotYetImplementedException();
+        this.deleteAutocompleteKeyword(company.getName());
+        return company.getName();
     }
 
 }
