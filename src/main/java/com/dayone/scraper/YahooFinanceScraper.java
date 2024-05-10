@@ -64,10 +64,7 @@ public class YahooFinanceScraper implements Scraper {
 //                Dividend d = null;  // not implemented yet
 //                dividends.add(d);
 
-                dividends.add(Dividend.builder()
-                        .date(LocalDateTime.of(year,month,day,0,0))
-                        .dividend(dividend)
-                        .build());
+                dividends.add(new Dividend(LocalDateTime.of(year, month, day, 0, 0), dividend));
             }
             scrapResult.setDividends(dividends);
 
