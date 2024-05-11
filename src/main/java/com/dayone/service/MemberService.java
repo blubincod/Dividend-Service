@@ -2,8 +2,8 @@ package com.dayone.service;
 
 import com.dayone.exception.impl.AlreadyExistUserException;
 import com.dayone.model.Auth;
-import com.dayone.model.MemberEntity;
 import com.dayone.persist.MemberRepository;
+import com.dayone.persist.entity.MemberEntity;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,10 +35,9 @@ public class MemberService implements UserDetailsService {
 
         // ID 생성 가능한 경우, 멤버 테이블에 저장
         member.setPassword(this.passwordEncoder.encode(member.getPassword()));
-        var result = this.memberRepository.save(member.toEntity());
 
         // 비밀번호는 암호화 되어서 저장되어야함
-        return result;
+        return this.memberRepository.save(member.toEntity());
     }
 
     public MemberEntity authenticate(Auth.SignIn member) {
